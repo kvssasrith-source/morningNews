@@ -3,7 +3,15 @@ const categoryMap = {
     'india': { category: 'nation', country: 'in' },
     'world': { category: 'world' }, // No country for world
     'technology': { category: 'technology', country: 'in' },
-    'business': { category: 'business', country: 'in' }
+    'business': { category: 'business', country: 'in' },
+    'maharashtra': { q: 'Maharashtra', country: 'in' },
+    'delhi': { q: 'Delhi', country: 'in' },
+    'karnataka': { q: 'Karnataka', country: 'in' },
+    'tamilnadu': { q: 'Tamil Nadu', country: 'in' },
+    'kerala': { q: 'Kerala', country: 'in' },
+    'gujarat': { q: 'Gujarat', country: 'in' },
+    'westbengal': { q: 'West Bengal', country: 'in' },
+    'telangana': { q: 'Telangana', country: 'in' }
 };
 
 function formatTime(dateString) {
@@ -36,7 +44,14 @@ const fetchNews = async (uiCategory = 'top') => {
         const apiParams = categoryMap[uiCategory] || categoryMap['top'];
         
         // Fetch from our own secure backend proxy instead of GNews directly
-        let url = `/api/news?category=${apiParams.category}`;
+        let url = `/api/news?`;
+        
+        if (apiParams.q) {
+            url += `q=${encodeURIComponent(apiParams.q)}`;
+        } else {
+            url += `category=${apiParams.category}`;
+        }
+        
         if (apiParams.country) {
             url += `&country=${apiParams.country}`;
         }

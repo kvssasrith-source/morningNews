@@ -24,12 +24,18 @@ class MorningDigest {
         const categoryBtns = document.querySelectorAll('.category-btn');
         categoryBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
+                const category = e.target.getAttribute('data-category');
+                
+                // Ignore clicks on elements without data-category (like the States dropdown toggle itself)
+                if (!category) return;
+                
                 // Remove active class from all
                 categoryBtns.forEach(b => b.classList.remove('active'));
-                // Add to clicked
+                
+                // If it's a state, we might also want to highlight the main dropdown button, 
+                // but for simplicity, we just highlight the specific state button clicked.
                 e.target.classList.add('active');
                 
-                const category = e.target.getAttribute('data-category');
                 if (this.currentCategory !== category) {
                     this.currentCategory = category;
                     this.loadNews(category);

@@ -133,6 +133,49 @@ body {
     width: 100%;
 }
 
+/* Dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--surface-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+    z-index: 101;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.dropdown-content .category-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dropdown-content .category-btn::after {
+    display: none;
+}
+
+.dropdown-content .category-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
 /* Main Layout */
 .news-container {
     max-width: var(--max-width);
