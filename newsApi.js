@@ -7,6 +7,7 @@ const categoryMap = {
     'maharashtra': { q: 'Maharashtra', country: 'in' },
     'delhi': { q: 'Delhi', country: 'in' },
     'karnataka': { q: 'Karnataka', country: 'in' },
+    'andhrapradesh': { q: 'Andhra Pradesh', country: 'in' },
     'tamilnadu': { q: 'Tamil Nadu', country: 'in' },
     'kerala': { q: 'Kerala', country: 'in' },
     'gujarat': { q: 'Gujarat', country: 'in' },
