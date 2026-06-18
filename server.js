@@ -1,18 +1,20 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
+const fs = require('fs');
 
-// Load environment variables from .env file if present
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Hardcoding the API key as fallback, but typically it belongs in a .env file securely on your server
 const API_KEY = process.env.GNEWS_API_KEY || '62ad37735139e96fcc35a803936072a4';
 
-// Serve the static frontend files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+// Detect if files are in 'public' or in the root directory
+const staticFolder = fs.existsSync(path.join(__dirname, 'public')) 
+    ? path.join(__dirname, 'public') 
+    : __dirname;
+
+app.use(express.static(staticFolder));
 
 // API Route to proxy GNews
 app.get('/api/news', async (req, res) => {
@@ -20,47 +22,28 @@ app.get('/api/news', async (req, res) => {
     
     let url = `https://gnews.io/api/v4/top-headlines?category=${category}&lang=${lang}&apikey=${API_KEY}`;
     
-    // Some categories like 'world' might not use a country filter in our frontend setup
     if (country && country !== 'undefined') {
         url += `&country=${country}`;
     }
 
     try {
-        // Native fetch is available in Node.js >= 18
         const response = await fetch(url);
-        
         if (!response.ok) {
-            console.error(`GNews API Error: ${response.status}`);
-            return res.status(response.status).json({ error: `GNews API Error: ${response.status}` });
+            return res.status(response.status).json({ error: `API Error: ${response.status}` });
         }
         
         const data = await response.json();
         res.json(data);
     } catch (error) {
-        console.error("Error fetching from GNews:", error);
-        res.status(500).json({ error: 'Failed to fetch news data from upstream.' });
+        res.status(500).json({ error: 'Failed to fetch news data' });
     }
 });
 
-const fs = require('fs');
-
-// Catch-all route to explicitly serve index.html or provide a helpful error message
+// Fallback to serve index.html
 app.get('*', (req, res) => {
-    const publicPath = path.join(__dirname, 'public', 'index.html');
-    if (fs.existsSync(publicPath)) {
-        res.sendFile(publicPath);
-    } else {
-        res.status(404).send(`
-            <h2>Deployment Error</h2>
-            <p>The backend server is running, but it cannot find the <code>public/</code> folder.</p>
-            <p>Current directory path: <code>${__dirname}</code></p>
-            <p>Please check your GitHub repository online and make sure the <code>public</code> folder is uploaded right next to server.js.</p>
-        `);
-    }
+    res.sendFile(path.join(staticFolder, 'index.html'));
 });
 
-// Start the server
 app.listen(PORT, () => {
-    console.log(`Morning Digest server is running on http://localhost:${PORT}`);
-    console.log(`Serving static files from ${path.join(__dirname, 'public')}`);
+    console.log(`Server is running on port ${PORT}`);
 });
