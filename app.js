@@ -38,6 +38,7 @@ class MorningDigest {
                 
                 if (this.currentCategory !== category) {
                     this.currentCategory = category;
+                    document.getElementById('section-title').textContent = e.target.textContent;
                     this.loadNews(category);
                 }
             });
