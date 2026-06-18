@@ -12,6 +12,12 @@ class MorningDigest {
         this.setDate();
         this.setupEventListeners();
         this.loadNews(this.currentCategory);
+        
+        // Auto-refresh the news every hour (3600000 milliseconds)
+        setInterval(() => {
+            console.log("Auto-refreshing news...");
+            this.loadNews(this.currentCategory);
+        }, 3600000);
     }
 
     setDate() {
